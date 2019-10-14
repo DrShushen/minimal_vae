@@ -53,7 +53,7 @@ def loss_function(recon_x, x, mu, logvar):
     return BCE + KLD
 
 
-def train(epoch, model, loader, optimizer):
+def train(epoch, model, loader, optimizer, args, device):
     
     model.train()
     train_loss = 0
@@ -76,7 +76,7 @@ def train(epoch, model, loader, optimizer):
           epoch, train_loss / len(loader.dataset)))
 
 
-def test(epoch, model, loader, optimizer):
+def test(epoch, model, loader, optimizer, args, device):
     
     model.eval()
     test_loss = 0
@@ -160,8 +160,8 @@ if __name__ == "__main__":
 
     # Train and test loop:
     for epoch in range(1, args.epochs + 1):
-        train(epoch, model, train_loader, optimizer)
-        test(epoch, model, test_loader, optimizer)
+        train(epoch, model, train_loader, optimizer, args, device)
+        test(epoch, model, test_loader, optimizer, args, device)
         with torch.no_grad():
             sample = torch.randn(64, 20).to(device)
             sample = model.decode(sample).cpu()
