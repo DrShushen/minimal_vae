@@ -121,7 +121,7 @@ def train(epoch, model, loader, optimizer, args, device, tracer):
     model.train()  # Sets the module in training mode.
     train_loss = 0
     
-    if tracer:
+    if tracer.enabled:
         print("\nTrain...\n")
 
     for batch_idx, (data, _) in enumerate(loader):
@@ -159,7 +159,7 @@ def test(epoch, model, loader, optimizer, args, device, tracer):
     model.eval()
     test_loss = 0
     
-    if tracer:
+    if tracer.enabled:
         print("\nTest...\n")
 
     with torch.no_grad():
