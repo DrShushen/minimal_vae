@@ -95,7 +95,9 @@ def test(epoch, model, loader, optimizer, args, device):
                     ])
                 save_image(
                     comparison.cpu(),
-                    'results/reconstruction_' + str(epoch) + '.png', 
+                    "{}/reconstruction_{}.png".format(
+                        args.results_subdir, 
+                        epoch),
                     nrow=n)
 
     test_loss /= len(loader.dataset)
@@ -161,10 +163,10 @@ if __name__ == "__main__":
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
 
     # Ensure results output folder exists:
-    directory = "./results/{}".format(
+    args.results_subdir = "./results/{}".format(
         args.results_subdir if args.results_subdir is not None else "")
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    if not os.path.exists(args.results_subdir):
+        os.makedirs(args.results_subdir)
 
     # Train and test loop:
     for epoch in range(1, args.epochs + 1):
@@ -175,4 +177,6 @@ if __name__ == "__main__":
             sample = model.decode(sample).cpu()
             save_image(
                 sample.view(64, 1, 28, 28),
-                'results/sample_' + str(epoch) + '.png')
+                "{}/sample_{}.png".format(
+                        args.results_subdir, 
+                        epoch))
