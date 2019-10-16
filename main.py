@@ -113,7 +113,7 @@ if __name__ == "__main__":
         '--epochs', type=int, default=10, metavar='N',
         help='number of epochs to train (default: 10)')
     parser.add_argument(
-        '--no-cuda', action='store_true', default=False,
+        '--no-cuda', action='store_false', default=False,
         help='enables CUDA training')
     parser.add_argument(
         '--seed', type=int, default=1, metavar='S', 
@@ -122,6 +122,13 @@ if __name__ == "__main__":
         '--log-interval', type=int, default=10, metavar='N',
         help='how many batches to wait before logging training status ' 
              '(default: 10)')
+    parser.add_argument(
+        '--trace-dims', action='store_false', default=False, 
+        help='print dimensions of Tensors throughout the execution, '
+             'for debug only (default: False)')
+    parser.add_argument(
+        '--results-subdir', type=str, default=None, metavar='DIR', 
+        help='Output the result files into ./result/DIR/ (default: ./result/)')
     args = parser.parse_args()
     args.cuda = not args.no_cuda and torch.cuda.is_available()
 
@@ -154,7 +161,8 @@ if __name__ == "__main__":
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
 
     # Ensure results output folder exists:
-    directory = "./results/"
+    directory = "./results/{}".format(
+        args.results_subdir if args.results_subdir is not None else "")
     if not os.path.exists(directory):
         os.makedirs(directory)
 
